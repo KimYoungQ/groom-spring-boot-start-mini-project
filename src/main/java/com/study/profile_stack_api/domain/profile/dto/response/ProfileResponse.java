@@ -20,7 +20,7 @@ public class ProfileResponse {
 
     public ProfileResponse() {}
 
-    public ProfileResponse from(Profile profile) {
+    public static ProfileResponse from(Profile profile) {
 
         ProfileResponse response = new ProfileResponse();
         response.id = profile.getId();
