@@ -9,25 +9,25 @@ public class Profile {
     private String email;
     private String bio;
     private Position position;
-    private int career_years;
-    private String github_url;
-    private String blog_url;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private int careerYears;
+    private String githubUrl;
+    private String blogUrl;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Profile() {}
 
-    public Profile(long id, String name, String email, String bio, Position position, int career_years, String github_url, String blog_url, LocalDateTime created_at, LocalDateTime updated_at) {
+    public Profile(long id, String name, String email, String bio, Position position, int careerYears, String githubUrl, String blogUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.bio = bio;
         this.position = position;
-        this.career_years = career_years;
-        this.github_url = github_url;
-        this.blog_url = blog_url;
-        this.created_at = LocalDateTime.now();
-        this.updated_at = LocalDateTime.now();
+        this.careerYears = careerYears;
+        this.githubUrl = githubUrl;
+        this.blogUrl = blogUrl;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     // Getter
@@ -52,24 +52,24 @@ public class Profile {
         return position;
     }
 
-    public int getCareer_years() {
-        return career_years;
+    public int getCareerYears() {
+        return careerYears;
     }
 
-    public String getGithub_url() {
-        return github_url;
+    public String getGithubUrl() {
+        return githubUrl;
     }
 
-    public String getBlog_url() {
-        return blog_url;
+    public String getBlogUrl() {
+        return blogUrl;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     // Setter
@@ -94,23 +94,23 @@ public class Profile {
         this.position = position;
     }
 
-    public void setCareer_years(int career_years) {
-        this.career_years = career_years;
+    public void setCareerYears(int careerYears) {
+        this.careerYears = careerYears;
     }
 
-    public void setGithub_url(String github_url) {
-        this.github_url = github_url;
+    public void setGithubUrl(String githubUrl) {
+        this.githubUrl = githubUrl;
     }
 
-    public void setBlog_url(String blog_url) {
-        this.blog_url = blog_url;
+    public void setBlogUrl(String blogUrl) {
+        this.blogUrl = blogUrl;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

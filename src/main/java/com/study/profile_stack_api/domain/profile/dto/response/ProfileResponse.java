@@ -29,11 +29,11 @@ public class ProfileResponse {
         response.bio = profile.getBio();
         response.position = profile.getPosition().getDescription();
         response.icon = profile.getPosition().getIcon();
-        response.careerYears = profile.getCareer_years();
-        response.githubUrl = profile.getGithub_url();
-        response.blogUrl = profile.getBlog_url();
-        response.createdAt = profile.getCreated_at();
-        response.updatedAt = profile.getUpdated_at();
+        response.careerYears = profile.getCareerYears();
+        response.githubUrl = profile.getGithubUrl();
+        response.blogUrl = profile.getBlogUrl();
+        response.createdAt = profile.getCreatedAt();
+        response.updatedAt = profile.getUpdatedAt();
 
         return response;
     }
