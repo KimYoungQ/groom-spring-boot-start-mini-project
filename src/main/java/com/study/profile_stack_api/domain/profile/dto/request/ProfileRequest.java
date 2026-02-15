@@ -1,6 +1,6 @@
 package com.study.profile_stack_api.domain.profile.dto.request;
 
-public class ProfileCreateRequest {
+public class ProfileRequest {
 
     private String name;
     private String email;
@@ -10,7 +10,7 @@ public class ProfileCreateRequest {
     private String githubUrl;
     private String blogUrl;
 
-    public ProfileCreateRequest() {}
+    public ProfileRequest() {}
 
     // Getter
 

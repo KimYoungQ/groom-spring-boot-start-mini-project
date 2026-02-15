@@ -1,37 +1,69 @@
 package com.study.profile_stack_api.domain.profile.entity;
 
+import com.study.profile_stack_api.domain.profile.dto.request.ProfileRequest;
+
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Profile {
 
     private long id;
-    private String name;
-    private String email;
-    private String bio;
-    private Position position;
-    private int careerYears;
-    private String githubUrl;
-    private String blogUrl;
+    private String name;                // 필수값
+    private String email;               // 필수값
+    private String bio;                 // null 허용
+    private Position position;          // 필수값
+    private int careerYears;            // 필수값
+    private String githubUrl;           // null 허용
+    private String blogUrl;             // null 허용
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public Profile() {}
 
-    public Profile(long id, String name, String email, String bio, Position position, int careerYears, String githubUrl, String blogUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.bio = bio;
-        this.position = position;
-        this.careerYears = careerYears;
-        this.githubUrl = githubUrl;
-        this.blogUrl = blogUrl;
+    public Profile(ProfileRequest profileRequest) {
+        Optional.ofNullable(profileRequest.getName())
+                .ifPresentOrElse(name -> {
+                            if (name.length() > 50 || name.trim().isEmpty()) {
+                                throw new IllegalArgumentException("이름은 1자~50자이여야 합니다.");
+                            }
+                            this.setName(name);
+                        }, () -> {
+                            throw new IllegalArgumentException("이름은 필수입니다.");
+                        }
+                );
+        Optional.ofNullable(profileRequest.getEmail())
+                .ifPresentOrElse(email -> {
+                            if (email.length() > 100 || email.trim().isEmpty()) {
+                                throw new IllegalArgumentException("email은 1자~100자이여야 합니다.");
+                            }
+                            this.setEmail(email);
+                        }, () -> {
+                            throw new IllegalArgumentException("email은 필수입니다.");}
+                );
+        Optional.ofNullable(profileRequest.getBio())
+                .ifPresent(bio -> {
+                    if (bio.length() > 500 || bio.trim().isEmpty()) {
+                        throw new IllegalArgumentException("자기소개는 500자이내여야 합니다.");
+                    }
+                    this.setBio(bio);
+                });
+        Optional.ofNullable(profileRequest.getPosition())
+                .map(String::toUpperCase)
+                .map(Position::valueOf)
+                .ifPresentOrElse(
+                        this::setPosition,
+                        () -> {throw new IllegalArgumentException("존재하지않는 직무 또는 필수입니다.");});
+        Optional.ofNullable(profileRequest.getCareerYears())
+                .ifPresent(careerYears -> {
+                    if (careerYears < 0) {
+                        throw new IllegalArgumentException("경력연차는 0이상이여야 합니다.");
+                    }
+                    this.setCareerYears(careerYears);
+                });
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     // Getter
-
     public long getId() {
         return id;
     }
