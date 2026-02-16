@@ -2,6 +2,7 @@ package com.study.profile_stack_api.domain.profile.service;
 
 import com.study.profile_stack_api.domain.profile.Dao.ProfileDao;
 import com.study.profile_stack_api.domain.profile.dto.request.ProfileRequest;
+import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResponse;
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.global.common.Page;
@@ -80,6 +81,7 @@ public class ProfileService {
                 .collect(Collectors.toList());
     }
 
+    // ================ UPDATE ====================
     /**
      * 프로필 수정
      * @param id
@@ -87,6 +89,7 @@ public class ProfileService {
      * @return
      */
     public ProfileResponse updateProfile(long id, ProfileRequest profileRequest) {
+
         Profile profile = profileDao.getProfile(id)
                 .orElseThrow(() -> new IllegalArgumentException("수정할 프로필이 없습니다. (id : " + id + ")"));
 
@@ -95,5 +98,16 @@ public class ProfileService {
         }
 
         return ProfileResponse.from(profileDao.updateProfile(profile.update(profileRequest)));
+    }
+
+    // ================ DELETE ====================
+    public ProfileDeleteResponse deleteProfileById(long id) {
+
+        Profile profile = profileDao.getProfile(id)
+                .orElseThrow(() -> new IllegalArgumentException("삭제할 프로필이 없습니다. (id : " + id + ")"));
+
+        profileDao.deleteProfileById(id);
+
+        return ProfileDeleteResponse.of(id);
     }
 }

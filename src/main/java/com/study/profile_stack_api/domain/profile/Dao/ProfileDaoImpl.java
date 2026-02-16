@@ -127,6 +127,13 @@ public class ProfileDaoImpl implements ProfileDao {
         return profile;
     }
 
+    // ============== DELETE =================
+    @Override
+    public void deleteProfileById(long id) {
+        String sql = "DELETE FROM profile WHERE id = ?";
+        jdbcTemplate.update(sql,id);
+    }
+
     // ===================================
     private final RowMapper<Profile> profileRowMapper = (rs, rowNum) -> {
         Profile profile = new Profile();

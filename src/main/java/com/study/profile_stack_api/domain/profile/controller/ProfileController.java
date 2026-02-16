@@ -1,6 +1,7 @@
 package com.study.profile_stack_api.domain.profile.controller;
 
 import com.study.profile_stack_api.domain.profile.dto.request.ProfileRequest;
+import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResponse;
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.service.ProfileService;
 import com.study.profile_stack_api.global.common.Page;
@@ -84,5 +85,11 @@ public class ProfileController {
             @RequestBody ProfileRequest profileRequest) {
 
         return profileService.updateProfile(id, profileRequest);
+    }
+
+    // ================ DELETE ==================
+    @DeleteMapping("/{id}")
+    public ProfileDeleteResponse deleteProfileById(@PathVariable long id) {
+        return profileService.deleteProfileById(id);
     }
 }

@@ -20,4 +20,7 @@ public interface ProfileDao {
 
     // ============ UPDATE ================
     Profile updateProfile(Profile profile);
+
+    // ============ DELETE ================
+    void deleteProfileById(long id);
 }
