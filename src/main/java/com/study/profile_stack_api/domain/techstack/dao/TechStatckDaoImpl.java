@@ -115,6 +115,15 @@ public class TechStatckDaoImpl implements TechStackDao {
         return techStack;
     }
 
+    //============== DELETE ===================
+
+
+    @Override
+    public void deleteTechStackById(long id) {
+        String sql = "DELETE FROM tech_stack WHERE id = ?";
+        jdbcTemplate.update(sql,id);
+    }
+
     // ===================================
     private final RowMapper<TechStack> techStackRowMapper = (rs, rowNum) -> {
         TechStack techStack = new TechStack();

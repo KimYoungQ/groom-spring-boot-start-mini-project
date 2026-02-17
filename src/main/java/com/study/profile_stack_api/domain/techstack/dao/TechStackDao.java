@@ -17,4 +17,7 @@ public interface TechStackDao {
 
     //========== UPDATE ==============
     TechStack updateTechStack(long profileId, long id, TechStack techStack);
+
+    //========== DELETE ==============
+    void deleteTechStackById(long id);
 }

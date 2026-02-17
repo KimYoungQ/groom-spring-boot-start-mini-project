@@ -3,6 +3,7 @@ package com.study.profile_stack_api.domain.techstack.service;
 import com.study.profile_stack_api.domain.profile.dao.ProfileDao;
 import com.study.profile_stack_api.domain.techstack.dao.TechStackDao;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackRequest;
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.global.common.Page;
@@ -105,5 +106,18 @@ public class TechStackService {
         }
 
         return TechStackResponse.from(techstackDao.updateTechStack(profileId, id, techStack.update(techStackRequest)));
+    }
+
+
+    public TechStackDeleteResponse deleteTechStack(long profileId, long id) {
+        profileDao.getProfile(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + profileId + ")"));
+
+        techstackDao.getTechStack(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 기술스택을 찾을 수 없습니다. (id : " + id + ")"));
+
+        techstackDao.deleteTechStackById(id);
+
+        return TechStackDeleteResponse.of(id);
     }
 }

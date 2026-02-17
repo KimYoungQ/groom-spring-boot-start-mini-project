@@ -1,6 +1,7 @@
 package com.study.profile_stack_api.domain.techstack.controller;
 
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackRequest;
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.Page;
@@ -48,6 +49,7 @@ public class TechStackController {
 
     /**
      * 기술 스택 단건 조회
+     *
      * @param profileId
      * @param id
      * @return
@@ -76,5 +78,21 @@ public class TechStackController {
             @RequestBody TechStackRequest techStackRequest) {
 
         return techStackService.updateTechStack(profileId, id, techStackRequest);
+    }
+
+    // =============== UPDATE ==================
+
+    /**
+     * 기술 스택 삭제
+     * @param profileId
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{profileId}/tech-stacks/{id}")
+    public TechStackDeleteResponse deleteTechStack(
+            @PathVariable long profileId,
+            @PathVariable long id) {
+
+        return techStackService.deleteTechStack(profileId, id);
     }
 }

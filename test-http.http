@@ -79,3 +79,5 @@ Content-Type: {{contentType}}
 ### 4-1. 프로필 삭제
 DELETE {{baseUrl}}/api/v1/profiles/4
 
+### 4-2. 기술 스택 삭제
+DELETE {{baseUrl}}/api/v1/profiles/1/tech-stacks/4
