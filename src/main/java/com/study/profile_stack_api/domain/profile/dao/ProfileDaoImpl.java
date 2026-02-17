@@ -114,7 +114,7 @@ public class ProfileDaoImpl implements ProfileDao {
                 profile.getName(),
                 profile.getEmail(),
                 profile.getBio(),
-                profile.getPosition().name(),
+                profile.getPosition().getDescription(),
                 profile.getCareerYears(),
                 profile.getGithubUrl(),
                 profile.getBlogUrl(),

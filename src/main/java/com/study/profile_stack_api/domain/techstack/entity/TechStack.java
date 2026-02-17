@@ -58,6 +58,33 @@ public class TechStack {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
+    public TechStack update(TechStackRequest request) {
+        Optional.ofNullable(request.getName())
+                .ifPresent(name  -> {
+                    if (name.length() > 50 || name.trim().isEmpty()) {
+                        throw new IllegalArgumentException("기술명은 50자 이내여야합니다.");
+                    }
+                    this.setName(name);
+                });
+        Optional.ofNullable(request.getCategory())
+                .map(String::toUpperCase)
+                .map(TechCategory::valueOf)
+                .ifPresent(this::setTechCategory);
+        Optional.ofNullable(request.getProficiency())
+                .map(String::toUpperCase)
+                .map(Proficiency::valueOf)
+                .ifPresent(this::setProficency);
+        Optional.ofNullable(request.getYearsOfExp())
+                .ifPresent(yearsOfExp -> {
+                    if (yearsOfExp < 0) {
+                        throw new IllegalArgumentException("경험 연수는 0이상이여야 합니다.");
+                    }
+                    this.setYearsOfExp(yearsOfExp);
+                });
+
+        return this;
+    }
+
     // Gegger & Setter
     public long getId() {
         return id;

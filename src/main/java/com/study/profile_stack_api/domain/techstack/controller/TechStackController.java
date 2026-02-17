@@ -59,4 +59,22 @@ public class TechStackController {
 
         return techStackService.getTechStack(profileId, id);
     }
+
+    // =============== UPDATE ==================
+
+    /**
+     * 기술 스택 수정
+     * @param profileId
+     * @param id
+     * @param techStackRequest
+     * @return
+     */
+    @PutMapping("/{profileId}/tech-stacks/{id}")
+    public TechStackResponse updateTechStack(
+            @PathVariable long profileId,
+            @PathVariable long id,
+            @RequestBody TechStackRequest techStackRequest) {
+
+        return techStackService.updateTechStack(profileId, id, techStackRequest);
+    }
 }

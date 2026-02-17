@@ -83,4 +83,27 @@ public class TechStackService {
 
         return TechStackResponse.from(techStack);
     }
+
+    //=============== READ ====================
+
+    /**
+     * 기술 스택 수정
+     * @param profileId
+     * @param id
+     * @param techStackRequest
+     * @return
+     */
+    public TechStackResponse updateTechStack(long profileId, long id, TechStackRequest techStackRequest) {
+        profileDao.getProfile(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + profileId + ")"));
+
+        TechStack techStack = techstackDao.getTechStack(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 기술스택을 찾을 수 없습니다. (id : " + id + ")"));
+
+        if (techStackRequest.hasNoUpdates()) {
+            throw new IllegalArgumentException("수정할 내용이 없습니다.");
+        }
+
+        return TechStackResponse.from(techstackDao.updateTechStack(profileId, id, techStack.update(techStackRequest)));
+    }
 }

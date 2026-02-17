@@ -14,4 +14,7 @@ public interface TechStackDao {
     Page<TechStack> getAllTechStacks(long profileId, int page, int size);
 
     Optional<TechStack> getTechStack(long id);
+
+    //========== UPDATE ==============
+    TechStack updateTechStack(long profileId, long id, TechStack techStack);
 }

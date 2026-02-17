@@ -90,6 +90,31 @@ public class TechStatckDaoImpl implements TechStackDao {
         }
     }
 
+    //============== READ ===================
+
+    @Override
+    public TechStack updateTechStack(long profileId, long id, TechStack techStack) {
+        String sql = """
+                UPDATE tech_stack
+                SET name = ?, category = ?, proficiency = ?, years_of_exp = ?
+                WHERE profile_id = ? and id = ?
+                """;
+
+        int updated = jdbcTemplate.update(sql,
+                techStack.getName(),
+                techStack.getTechCategory().getDescription(),
+                techStack.getProficency().getDescription(),
+                techStack.getYearsOfExp(),
+                profileId,
+                id);
+
+        if (updated == 0) {
+            throw new RuntimeException("techStack not found. ID: " + techStack.getId());
+        }
+
+        return techStack;
+    }
+
     // ===================================
     private final RowMapper<TechStack> techStackRowMapper = (rs, rowNum) -> {
         TechStack techStack = new TechStack();

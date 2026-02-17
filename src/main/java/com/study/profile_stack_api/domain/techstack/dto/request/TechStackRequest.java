@@ -10,11 +10,18 @@ public class TechStackRequest {
     private String categoryIcon;
     private String proficiency;
     private String proficiencyIcon;
-    private int yearsOfExp;
+    private Integer yearsOfExp;
     private LocalDateTime createdAt;
     private LocalDateTime deletedAt;
 
     public TechStackRequest() {}
+
+    public boolean hasNoUpdates() {
+        return name == null
+                && category == null
+                && proficiency == null
+                && yearsOfExp == null;
+    }
 
     // Getter
     public long getProfileId() {
