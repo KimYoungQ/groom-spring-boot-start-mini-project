@@ -11,7 +11,7 @@ public class TechStack {
     private long profileId;             // not null
     private String name;                // not null
     private TechCategory techCategory;  // not null
-    private Proficency proficency;      // not null
+    private Proficiency proficiency;      // not null
     private Integer yearsOfExp;         // not null
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -40,7 +40,7 @@ public class TechStack {
                 );
         Optional.ofNullable(request.getProficiency())
                 .map(String::toUpperCase)
-                .map(Proficency::valueOf)
+                .map(Proficiency::valueOf)
                 .ifPresentOrElse(
                         this::setProficency,
                         () -> new IllegalArgumentException("숙련도는 필수입니다.")
@@ -91,12 +91,12 @@ public class TechStack {
         this.techCategory = techCategory;
     }
 
-    public Proficency getProficency() {
-        return proficency;
+    public Proficiency getProficency() {
+        return proficiency;
     }
 
-    public void setProficency(Proficency proficency) {
-        this.proficency = proficency;
+    public void setProficency(Proficiency proficiency) {
+        this.proficiency = proficiency;
     }
 
     public Integer getYearsOfExp() {

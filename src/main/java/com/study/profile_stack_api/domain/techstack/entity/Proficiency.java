@@ -1,6 +1,6 @@
 package com.study.profile_stack_api.domain.techstack.entity;
 
-public enum Proficency {
+public enum Proficiency {
     BEGINNER("입문", "🌱"),
     INTERMEDIATE("중급", "🌿"),
     ADVANCED("고급", "🌳"),
@@ -9,7 +9,7 @@ public enum Proficency {
     private String description;
     private String icon;
 
-    Proficency(String description, String icon) {
+    Proficiency(String description, String icon) {
         this.description = description;
         this.icon = icon;
     }

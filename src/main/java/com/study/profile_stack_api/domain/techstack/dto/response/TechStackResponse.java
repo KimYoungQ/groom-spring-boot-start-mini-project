@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class TechStackResponse {
 
+    private long id;
     private long profileId;
     private String name;
     private String techCategory;
@@ -20,6 +21,7 @@ public class TechStackResponse {
 
     public static TechStackResponse from(TechStack techStack) {
         TechStackResponse response = new TechStackResponse();
+        response.id = techStack.getId();
         response.name = techStack.getName();
         response.techCategory = techStack.getTechCategory().getDescription();
         response.techIcon = techStack.getTechCategory().getIcon();
@@ -36,6 +38,10 @@ public class TechStackResponse {
     public long getProfileId() {
         return profileId;
     }
+
+    public long getId() { return id; }
+
+    public void setId(long id) { this.id = id; }
 
     public void setProfileId(long profileId) {
         this.profileId = profileId;

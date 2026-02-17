@@ -5,9 +5,13 @@ import com.study.profile_stack_api.domain.techstack.dao.TechStackDao;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackRequest;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
+import com.study.profile_stack_api.global.common.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -17,8 +21,17 @@ public class TechStackService {
     private final TechStackDao techstackDao;
     private final ProfileDao profileDao;
 
+    private static final int MAX_PAGE_SIZE = 100;
+
     //=============== CREATE ====================
+    /**
+     * 기술 스택 저장
+     * @param profileId
+     * @param techstackRequest
+     * @return
+     */
     public TechStackResponse save(long profileId, TechStackRequest techstackRequest) {
+
         profileDao.getProfile(profileId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + profileId + ")"));
 
@@ -26,5 +39,48 @@ public class TechStackService {
         techStack.setProfileId(profileId);
 
         return TechStackResponse.from(techstackDao.save(techStack));
+    }
+
+    //=============== READ ====================
+
+    /**
+     * 기술 스택 목록 조회
+     * @param profileId
+     * @param size
+     * @param page
+     * @return
+     */
+    public Page<TechStackResponse> getAllTechStack(long profileId, int size, int page) {
+
+        profileDao.getProfile(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + profileId + ")"));
+
+        page = Math.max(0, page);
+        size = Math.min(size, MAX_PAGE_SIZE);
+
+        Page<TechStack> techStackPage = techstackDao.getAllTechStacks(profileId, page, size);
+
+        List<TechStackResponse> content = techStackPage.getContent().stream()
+                                            .map(TechStackResponse::from)
+                                            .collect(Collectors.toList());
+
+        return new Page<>(content, page, size, techStackPage.getTotalElements());
+    }
+
+    /**
+     * 기술 스택 단건 조회
+     * @param profileId
+     * @param id
+     * @return
+     */
+    public TechStackResponse getTechStack(long profileId, long id) {
+
+        profileDao.getProfile(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + profileId + ")"));
+
+        TechStack techStack = techstackDao.getTechStack(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 기술스택을 찾을 수 없습니다. (id : " + id + ")"));
+
+        return TechStackResponse.from(techStack);
     }
 }

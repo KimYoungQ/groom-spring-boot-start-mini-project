@@ -1,14 +1,20 @@
 package com.study.profile_stack_api.domain.techstack.dao;
 
+import com.study.profile_stack_api.domain.techstack.entity.Proficiency;
+import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
+import com.study.profile_stack_api.global.common.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,7 +23,6 @@ public class TechStatckDaoImpl implements TechStackDao {
     private final JdbcTemplate jdbcTemplate;
 
     //============== CREATE ===================
-
     @Override
     public TechStack save(TechStack techStack ) {
         String sql = """
@@ -46,4 +51,56 @@ public class TechStatckDaoImpl implements TechStackDao {
 
         return techStack;
     }
+
+    //============== READ ===================
+
+    @Override
+    public Page<TechStack> getAllTechStacks(long profileId, int page, int size) {
+
+        String countSql = "SELECT count(*) FROM tech_stack WHERE profile_id = ?";
+        Long totalElements = jdbcTemplate.queryForObject(countSql, Long.class, profileId);
+
+        // 전체 데이터가 0건이면 빈 페이지 반환
+        if (totalElements == null || totalElements == 0) {
+            return new Page<>(List.of(), page, size, 0);
+        }
+
+        String datasql = """
+                SELECT * FROM tech_stack
+                WHERE profile_id = ?
+                ORDER BY id DESC
+                LIMIT ? OFFSET ?
+                """;
+
+        int offset = page * size;
+        List<TechStack> content = jdbcTemplate.query(datasql, techStackRowMapper, profileId, size, offset);
+
+        return new Page<>(content, page, size, totalElements);
+    }
+
+    @Override
+    public Optional<TechStack> getTechStack(long id) {
+        String sql = "SELECT * FROM tech_stack WHERE id = ?";
+
+        try {
+            TechStack techStack = jdbcTemplate.queryForObject(sql, techStackRowMapper, id);
+            return Optional.ofNullable(techStack);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    // ===================================
+    private final RowMapper<TechStack> techStackRowMapper = (rs, rowNum) -> {
+        TechStack techStack = new TechStack();
+        techStack.setId(rs.getLong("id"));
+        techStack.setProfileId(rs.getLong("profile_id"));
+        techStack.setName(rs.getString("name"));
+        techStack.setTechCategory(TechCategory.valueOf(rs.getString("category")));
+        techStack.setProficency(Proficiency.valueOf(rs.getString("proficiency")));
+        techStack.setYearsOfExp(rs.getInt("years_of_exp"));
+        techStack.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        techStack.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        return techStack;
+    };
 }
