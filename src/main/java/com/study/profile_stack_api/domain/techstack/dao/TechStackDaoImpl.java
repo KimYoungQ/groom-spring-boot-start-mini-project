@@ -38,7 +38,7 @@ public class TechStackDaoImpl implements TechStackDao {
             ps.setLong(1, techStack.getProfileId());
             ps.setString(2, techStack.getName());
             ps.setString(3, techStack.getTechCategory().name());
-            ps.setString(4, techStack.getProficency().name());
+            ps.setString(4, techStack.getProficiency().name());
             ps.setInt(5, techStack.getYearsOfExp());
             ps.setTimestamp(6, Timestamp.valueOf(techStack.getCreatedAt()));
             ps.setTimestamp(7, Timestamp.valueOf(techStack.getUpdatedAt()));
@@ -131,7 +131,7 @@ public class TechStackDaoImpl implements TechStackDao {
         int updated = jdbcTemplate.update(sql,
                 techStack.getName(),
                 techStack.getTechCategory().getDescription(),
-                techStack.getProficency().getDescription(),
+                techStack.getProficiency().getDescription(),
                 techStack.getYearsOfExp(),
                 profileId,
                 id);
@@ -159,7 +159,7 @@ public class TechStackDaoImpl implements TechStackDao {
         techStack.setProfileId(rs.getLong("profile_id"));
         techStack.setName(rs.getString("name"));
         techStack.setTechCategory(TechCategory.valueOf(rs.getString("category")));
-        techStack.setProficency(Proficiency.valueOf(rs.getString("proficiency")));
+        techStack.setProficiency(Proficiency.valueOf(rs.getString("proficiency")));
         techStack.setYearsOfExp(rs.getInt("years_of_exp"));
         techStack.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         techStack.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());

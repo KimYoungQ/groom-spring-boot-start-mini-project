@@ -1,9 +1,11 @@
 package com.study.profile_stack_api.domain.profile.dto.response;
 
 import com.study.profile_stack_api.domain.profile.entity.Profile;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class ProfileResponse {
 
     private long id;
@@ -17,8 +19,6 @@ public class ProfileResponse {
     private String blogUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public ProfileResponse() {}
 
     public static ProfileResponse from(Profile profile) {
 
@@ -36,51 +36,5 @@ public class ProfileResponse {
         response.updatedAt = profile.getUpdatedAt();
 
         return response;
-    }
-
-    // Getter
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public int getCareerYears() {
-        return careerYears;
-    }
-
-    public String getGithubUrl() {
-        return githubUrl;
-    }
-
-    public String getBlogUrl() {
-        return blogUrl;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }

@@ -1,10 +1,16 @@
 package com.study.profile_stack_api.domain.profile.entity;
 
 import com.study.profile_stack_api.domain.profile.dto.request.ProfileRequest;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Profile {
 
     private long id;
@@ -12,13 +18,11 @@ public class Profile {
     private String email;               // 필수값
     private String bio;                 // null 허용
     private Position position;          // 필수값
-    private Integer careerYears;            // 필수값
+    private Integer careerYears;        // 필수값
     private String githubUrl;           // null 허용
     private String blogUrl;             // null 허용
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public Profile() {}
 
     public Profile(ProfileRequest profileRequest) {
         Optional.ofNullable(profileRequest.getName())
@@ -66,7 +70,7 @@ public class Profile {
                         }
                 );
         Optional.ofNullable(profileRequest.getGithubUrl())
-                .ifPresent( githubUrl -> {
+                .ifPresent(githubUrl -> {
                     if (githubUrl.length() > 200 || githubUrl.trim().isEmpty()) {
                         throw new IllegalArgumentException("github url은 200자 이내여야 합니다.");
                     }
@@ -86,7 +90,7 @@ public class Profile {
 
     public Profile update(ProfileRequest profileRequest) {
         Optional.ofNullable(profileRequest.getName())
-                .ifPresent( name -> {
+                .ifPresent(name -> {
                     if (name.length() > 50 || name.trim().isEmpty()) {
                         throw new IllegalArgumentException("이름은 1자~50자이여야 합니다.");
                     }
@@ -118,7 +122,7 @@ public class Profile {
                     this.setCareerYears(careerYears);
                 });
         Optional.ofNullable(profileRequest.getGithubUrl())
-                .ifPresent( githubUrl -> {
+                .ifPresent(githubUrl -> {
                     if (githubUrl.length() > 200 || githubUrl.trim().isEmpty()) {
                         throw new IllegalArgumentException("github url은 200자 이내여야 합니다.");
                     }
@@ -135,88 +139,5 @@ public class Profile {
         this.updatedAt = LocalDateTime.now();
 
         return this;
-    }
-
-    // Getter
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public Integer getCareerYears() {
-        return careerYears;
-    }
-
-    public String getGithubUrl() {
-        return githubUrl;
-    }
-
-    public String getBlogUrl() {
-        return blogUrl;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    // Setter
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public void setCareerYears(Integer careerYears) {
-        this.careerYears = careerYears;
-    }
-
-    public void setGithubUrl(String githubUrl) {
-        this.githubUrl = githubUrl;
-    }
-
-    public void setBlogUrl(String blogUrl) {
-        this.blogUrl = blogUrl;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
