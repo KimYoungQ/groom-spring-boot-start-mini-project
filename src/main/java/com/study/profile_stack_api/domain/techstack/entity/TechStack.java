@@ -1,10 +1,16 @@
 package com.study.profile_stack_api.domain.techstack.entity;
 
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackRequest;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class TechStack {
 
     private long id;
@@ -15,8 +21,6 @@ public class TechStack {
     private Integer yearsOfExp;         // not null
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public TechStack() {};
 
     public TechStack(TechStackRequest request) {
         Optional.ofNullable(request.getProfileId())
@@ -42,7 +46,7 @@ public class TechStack {
                 .map(String::toUpperCase)
                 .map(Proficiency::valueOf)
                 .ifPresentOrElse(
-                        this::setProficency,
+                        this::setProficiency,
                         () -> new IllegalArgumentException("숙련도는 필수입니다.")
                 );
         Optional.ofNullable(request.getYearsOfExp())
@@ -73,7 +77,7 @@ public class TechStack {
         Optional.ofNullable(request.getProficiency())
                 .map(String::toUpperCase)
                 .map(Proficiency::valueOf)
-                .ifPresent(this::setProficency);
+                .ifPresent(this::setProficiency);
         Optional.ofNullable(request.getYearsOfExp())
                 .ifPresent(yearsOfExp -> {
                     if (yearsOfExp < 0) {
@@ -83,70 +87,5 @@ public class TechStack {
                 });
 
         return this;
-    }
-
-    // Gegger & Setter
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(long profileId) {
-        this.profileId = profileId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public TechCategory getTechCategory() {
-        return techCategory;
-    }
-
-    public void setTechCategory(TechCategory techCategory) {
-        this.techCategory = techCategory;
-    }
-
-    public Proficiency getProficency() {
-        return proficiency;
-    }
-
-    public void setProficency(Proficiency proficiency) {
-        this.proficiency = proficiency;
-    }
-
-    public Integer getYearsOfExp() {
-        return yearsOfExp;
-    }
-
-    public void setYearsOfExp(Integer yearsOfExp) {
-        this.yearsOfExp = yearsOfExp;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

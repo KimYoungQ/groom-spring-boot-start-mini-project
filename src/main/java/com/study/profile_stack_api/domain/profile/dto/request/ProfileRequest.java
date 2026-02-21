@@ -1,5 +1,10 @@
 package com.study.profile_stack_api.domain.profile.dto.request;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Getter
 public class ProfileRequest {
 
     private String name;
@@ -10,8 +15,6 @@ public class ProfileRequest {
     private String githubUrl;
     private String blogUrl;
 
-    public ProfileRequest() {}
-
     public boolean hasNoUpdates() {
         return name == null
                 && email == null
@@ -20,34 +23,5 @@ public class ProfileRequest {
                 && careerYears == null
                 && githubUrl == null
                 && blogUrl == null;
-    }
-
-    // Getter
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public Integer getCareerYears() {
-        return careerYears;
-    }
-
-    public String getGithubUrl() {
-        return githubUrl;
-    }
-
-    public String getBlogUrl() {
-        return blogUrl;
     }
 }
