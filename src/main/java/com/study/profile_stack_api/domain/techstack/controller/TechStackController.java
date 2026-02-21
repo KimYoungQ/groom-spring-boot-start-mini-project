@@ -4,8 +4,10 @@ import com.study.profile_stack_api.domain.techstack.dto.request.TechStackRequest
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
+import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -57,11 +59,13 @@ public class TechStackController {
      * @return
      */
     @GetMapping("/{profileId}/tech-stacks/{id}")
-    public TechStackResponse getTechStack(
+    public ResponseEntity<ApiResponse<TechStackResponse>> getTechStack(
             @PathVariable long profileId,
             @PathVariable long id) {
 
-        return techStackService.getTechStack(profileId, id);
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.success(techStackService.getTechStack(profileId, id)));
     }
 
     // =============== UPDATE ==================

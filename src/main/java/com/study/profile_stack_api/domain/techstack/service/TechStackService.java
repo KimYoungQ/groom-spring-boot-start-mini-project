@@ -7,6 +7,8 @@ import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDelete
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.global.common.Page;
+import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
+import com.study.profile_stack_api.global.exception.TechStackNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,10 +82,10 @@ public class TechStackService {
     public TechStackResponse getTechStack(long profileId, long id) {
 
         profileDao.getProfile(profileId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + profileId + ")"));
+                .orElseThrow(() -> new ProfileNotFoundException(profileId));
 
         TechStack techStack = techstackDao.getTechStack(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 기술스택을 찾을 수 없습니다. (id : " + id + ")"));
+                .orElseThrow(() -> new TechStackNotFoundException(id));
 
         return TechStackResponse.from(techStack);
     }

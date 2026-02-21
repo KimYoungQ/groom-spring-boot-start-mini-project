@@ -129,6 +129,19 @@ public class ProfileDaoImpl implements ProfileDao {
         return content;
     }
 
+    @Override
+    public Optional<Profile> getEmail(String email) {
+
+        String sql = "SELECT * FROM profile WHERE email = ?";
+
+        try {
+            Profile profile = jdbcTemplate.queryForObject(sql, profileRowMapper, email);
+            return Optional.ofNullable(profile);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     // ============== UPDATE =================
     @Override
     public Profile updateProfile(Profile profile) {

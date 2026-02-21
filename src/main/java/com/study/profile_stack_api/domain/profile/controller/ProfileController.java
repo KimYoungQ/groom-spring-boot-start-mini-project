@@ -6,6 +6,7 @@ import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.service.ProfileService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
+import jakarta.servlet.ServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,12 @@ public class ProfileController {
      * POST /api/v1/profiles
      */
     @PostMapping
-    public ProfileResponse craeteProfile(@RequestBody ProfileRequest request) {
-        return profileService.save(request);
+    public  ResponseEntity<ApiResponse<ProfileResponse>> craeteProfile(@RequestBody ProfileRequest request, ServletResponse servletResponse) {
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.success(profileService.save(request)));
+
     }
 
     // ================ READ ==================
@@ -60,11 +65,10 @@ public class ProfileController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProfileResponse>> getProfile(@PathVariable long id) {
-        ProfileResponse response = profileService.getProfile(id);
 
         return ResponseEntity
                 .ok()
-                .body(ApiResponse.success(response));
+                .body(ApiResponse.success(profileService.getProfile(id)));
     }
 
     /**
@@ -98,7 +102,10 @@ public class ProfileController {
 
     // ================ DELETE ==================
     @DeleteMapping("/{id}")
-    public ProfileDeleteResponse deleteProfileById(@PathVariable long id) {
-        return profileService.deleteProfileById(id);
+    public ResponseEntity<ApiResponse<ProfileDeleteResponse>> deleteProfileById(@PathVariable long id) {
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.success(profileService.deleteProfileById(id)));
     }
 }

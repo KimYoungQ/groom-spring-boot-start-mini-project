@@ -6,6 +6,7 @@ import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResp
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.global.common.Page;
+import com.study.profile_stack_api.global.exception.DuplicateEmailException;
 import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,11 @@ public class ProfileService {
      * 프로필 생성
      */
     public ProfileResponse save(ProfileRequest request) {
+
+        profileDao.getEmail(request.getEmail())
+                .ifPresent(profile -> {
+                    throw new DuplicateEmailException(profile.getEmail());
+                });
 
         return ProfileResponse.from(profileDao.save(new Profile(request)));
     }
@@ -64,7 +70,7 @@ public class ProfileService {
 
         return profileDao.getProfile(id)
                 .map(ProfileResponse::from)
-                .orElseThrow(ProfileNotFoundException::new);
+                .orElseThrow(() -> new ProfileNotFoundException(id));
     }
 
     /**
@@ -101,8 +107,8 @@ public class ProfileService {
     // ================ DELETE ====================
     public ProfileDeleteResponse deleteProfileById(long id) {
 
-        Profile profile = profileDao.getProfile(id)
-                .orElseThrow(() -> new IllegalArgumentException("삭제할 프로필이 없습니다. (id : " + id + ")"));
+        profileDao.getProfile(id)
+                .orElseThrow(() -> new ProfileNotFoundException(id));
 
         profileDao.deleteProfileById(id);
 
