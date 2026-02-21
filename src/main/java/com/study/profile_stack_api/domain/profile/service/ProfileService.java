@@ -6,6 +6,7 @@ import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResp
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.global.common.Page;
+import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,10 +62,9 @@ public class ProfileService {
      */
     public ProfileResponse getProfile(long id) {
 
-        Profile profile = profileDao.getProfile(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로필을 찾을 수 없습니다. (id : " + id + ")"));
-
-        return ProfileResponse.from(profile);
+        return profileDao.getProfile(id)
+                .map(ProfileResponse::from)
+                .orElseThrow(ProfileNotFoundException::new);
     }
 
     /**

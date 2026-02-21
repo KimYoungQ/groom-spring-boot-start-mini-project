@@ -4,8 +4,10 @@ import com.study.profile_stack_api.domain.profile.dto.request.ProfileRequest;
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResponse;
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.service.ProfileService;
+import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,8 +59,12 @@ public class ProfileController {
      * @return
      */
     @GetMapping("/{id}")
-    public ProfileResponse getProfile(@PathVariable long id) {
-        return profileService.getProfile(id);
+    public ResponseEntity<ApiResponse<ProfileResponse>> getProfile(@PathVariable long id) {
+        ProfileResponse response = profileService.getProfile(id);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.success(response));
     }
 
     /**
@@ -67,8 +73,11 @@ public class ProfileController {
      * @return
      */
     @GetMapping("/position/{position}")
-    public List<ProfileResponse> searchProfileByPosition(@PathVariable String position) {
-        return profileService.searchProfileByPosition(position);
+    public ResponseEntity<ApiResponse<List<ProfileResponse>>> searchProfileByPosition(@PathVariable String position) {
+        //return profileService.searchProfileByPosition(position);
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.success(profileService.searchProfileByPosition(position)));
     }
 
     // ================ UPDATE ==================

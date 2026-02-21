@@ -11,7 +11,7 @@ public class ApiResponse<T> {
     /**
      * 성공 응답 생성 메서드
      */
-    public static <T> ApiResponse<T> sucess(T data) {
+    public static <T> ApiResponse<T> success(T data) {
         ApiResponse<T> response = new ApiResponse<>();
         response.success = true;
         response.data = data;
