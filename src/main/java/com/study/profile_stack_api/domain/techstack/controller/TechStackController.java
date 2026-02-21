@@ -43,8 +43,8 @@ public class TechStackController {
     @GetMapping("/{profileId}/tech-stacks")
     public Page<TechStackResponse> getAllTechStacks(
             @PathVariable long profileId,
-            @RequestParam(defaultValue = "0") int size,
-            @RequestParam(defaultValue = "10") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String proficiency) {
 

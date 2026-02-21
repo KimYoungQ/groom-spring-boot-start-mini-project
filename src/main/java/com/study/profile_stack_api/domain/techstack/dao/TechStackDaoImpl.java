@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class TechStatckDaoImpl implements TechStackDao {
+public class TechStackDaoImpl implements TechStackDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -37,8 +37,8 @@ public class TechStatckDaoImpl implements TechStackDao {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"ID"});
             ps.setLong(1, techStack.getProfileId());
             ps.setString(2, techStack.getName());
-            ps.setString(3, techStack.getTechCategory().getDescription());
-            ps.setString(4, techStack.getProficency().getDescription());
+            ps.setString(3, techStack.getTechCategory().name());
+            ps.setString(4, techStack.getProficency().name());
             ps.setInt(5, techStack.getYearsOfExp());
             ps.setTimestamp(6, Timestamp.valueOf(techStack.getCreatedAt()));
             ps.setTimestamp(7, Timestamp.valueOf(techStack.getUpdatedAt()));
@@ -69,8 +69,8 @@ public class TechStatckDaoImpl implements TechStackDao {
         }
 
         if (proficiency != null) {
-            countSql += " AND proficiency LIKE ?";
-            countParams.add("%" + proficiency + "%");
+            countSql += " AND proficiency = ?";
+            countParams.add(proficiency);
         }
 
         Long totalElements = jdbcTemplate.queryForObject(countSql, Long.class, countParams.toArray());

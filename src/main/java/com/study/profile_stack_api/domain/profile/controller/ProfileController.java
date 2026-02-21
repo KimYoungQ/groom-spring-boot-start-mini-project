@@ -27,7 +27,7 @@ public class ProfileController {
      * POST /api/v1/profiles
      */
     @PostMapping
-    public  ResponseEntity<ApiResponse<ProfileResponse>> craeteProfile(@RequestBody ProfileRequest request, ServletResponse servletResponse) {
+    public  ResponseEntity<ApiResponse<ProfileResponse>> createProfile(@RequestBody ProfileRequest request, ServletResponse servletResponse) {
 
         return ResponseEntity
                 .ok()

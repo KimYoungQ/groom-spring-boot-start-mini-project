@@ -28,18 +28,20 @@ public class Profile {
                             }
                             this.setName(name);
                         }, () -> {
-                            throw new IllegalArgumentException("이름은 필수입니33다.");
+                            throw new IllegalArgumentException("이름은 필수입니다.");
                         }
                 );
-        Optional.ofNullable(profileRequest.getEmail())
-                .ifPresentOrElse(email -> {
-                            if (email.length() > 100 || email.trim().isEmpty()) {
-                                throw new IllegalArgumentException("email은 1자~100자이여야 합니다.");
-                            }
-                            this.setEmail(email);
-                        }, () -> {
-                            throw new IllegalArgumentException("email은 필수입니다.");}
-                );
+
+        String email = Optional.ofNullable(profileRequest.getEmail())
+                .filter(e -> !e.trim().isEmpty())
+                .orElseThrow(() -> new IllegalArgumentException("email은 필수입니다."));
+
+        if (email.length() > 100) {
+            throw new IllegalArgumentException("email은 1자~100자여야 합니다.");
+        }
+
+        this.setEmail(email);
+
         Optional.ofNullable(profileRequest.getBio())
                 .ifPresent(bio -> {
                     if (bio.length() > 500 || bio.trim().isEmpty()) {
@@ -130,7 +132,6 @@ public class Profile {
                     this.setBlogUrl(blogUrl);
                 });
 
-        this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
 
         return this;
