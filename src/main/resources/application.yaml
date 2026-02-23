@@ -11,6 +11,9 @@ server:
 spring:
   application:
     name: my-spring-study-diary
+  messages:
+    basename: messages,ValidationMessages
+    encoding: UTF-8
 
   # H2 데이터베이스 설정
   datasource:

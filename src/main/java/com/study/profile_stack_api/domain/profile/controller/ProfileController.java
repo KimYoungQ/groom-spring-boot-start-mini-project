@@ -7,15 +7,19 @@ import com.study.profile_stack_api.domain.profile.service.ProfileService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import jakarta.servlet.ServletResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/profiles")
 @RequiredArgsConstructor
+@Validated
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -64,7 +68,9 @@ public class ProfileController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProfileResponse>> getProfile(@PathVariable long id) {
+    public ResponseEntity<ApiResponse<ProfileResponse>> getProfile(
+            @PathVariable
+            @Positive(message = "{profile.id.positive}") long id) {
 
         return ResponseEntity
                 .ok()
