@@ -1,49 +1,35 @@
 package com.study.profile_stack_api.global.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class ApiResponse<T> {
 
-    private boolean success;    // 성공/실패 여부
-    private T data;             // 실제 응답 데이터
-    private ErrorInfo error;    // 에러 정보 (실패 시)
+    private boolean success;
+    private T data;
+    private String errorCode;
+    private String errorMessage;
 
-    private  ApiResponse() {}
-
-    /**
-     * 성공 응답 생성 메서드
-     */
     public static <T> ApiResponse<T> success(T data) {
-        ApiResponse<T> response = new ApiResponse<>();
-        response.success = true;
-        response.data = data;
-        response.error = null;
-        return response;
+
+        return ApiResponse.<T>builder()
+                .success(true)
+                .data(data)
+                .build();
     }
 
-    // Getter
+    public static <T> ApiResponse<T> error(String errorCode, String errorMessage) {
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public ErrorInfo getError() {
-        return error;
-    }
-
-    public static class ErrorInfo {
-        private String code;    // 에러 코드
-        private String message; // 에러 메세지
-
-        public ErrorInfo(String code, String message) {
-            this.code = code;
-            this.message = message;
-        }
-
-        //Getter
-        public String getCode() { return code; }
-        public String getMessage() { return message;}
+        return ApiResponse.<T>builder()
+                .success(false)
+                .errorCode(errorCode)
+                .errorMessage(errorMessage)
+                .build();
     }
 }

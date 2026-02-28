@@ -8,10 +8,13 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    // 공통 에러
+    INTERNAL_ERROR("INTERNAL_ERROR", "서버 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_INPUT("INVALID_INPUT", "입력값이 올바르지 않습니다", HttpStatus.BAD_REQUEST),
+
     DUPLICATE_EMAIL("DUPLICATE_EMAIL", "이미 사용중인 이메일입니다", HttpStatus.CONFLICT),
     PROFILE_NOT_FOUND("PROFILE_NOT_FOUND", "프로필을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    TECHSTACK_NOT_FOUND("TECHSTACK_NOT_FOUND", "기술스택을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    INVALID_INPUT("INVALID_INPUT", "잘못된 입력값입니다.", HttpStatus.BAD_REQUEST);
+    TECHSTACK_NOT_FOUND("TECHSTACK_NOT_FOUND", "기술스택을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
     private final String code;
     private final String message;
