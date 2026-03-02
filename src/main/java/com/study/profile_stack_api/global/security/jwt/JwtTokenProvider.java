@@ -3,6 +3,7 @@ package com.study.profile_stack_api.global.security.jwt;
 
 import com.study.profile_stack_api.auth.exception.ExpiredTokenException;
 import com.study.profile_stack_api.auth.exception.InvalidTokenException;
+import com.study.profile_stack_api.global.security.util.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -41,8 +42,8 @@ public class JwtTokenProvider {
      * Authentication 객체를 기반으로 Access Token 생성
      */
     public String generateAccessToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return generateAccessToken(userDetails.getUsername(), userDetails.getAuthorities().stream()
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return generateAccessToken(userDetails.getId() ,userDetails.getUsername(), userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(",")));
     }
@@ -50,12 +51,13 @@ public class JwtTokenProvider {
     /**
      * username과 roles를 기반으로 Access Token 생성
      */
-    public String generateAccessToken(String username, String roles) {
+    public String generateAccessToken(Long id, String username, String roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .subject(username)              // 토큰의 주체 (사용자 식별자)
+                .claim("id", id)
                 .claim("roles", roles)          // 권한 정보
                 .claim("type", "access")        // 토큰 타입 구분
                 .issuedAt(now)                  // 발급 시간
@@ -93,6 +95,24 @@ public class JwtTokenProvider {
                     .getPayload();
 
             return claims.getSubject();
+        } catch (Exception e) {
+            log.error("Failed to extract username from token", e);
+            throw new InvalidTokenException("Invalid token");
+        }
+    }
+
+    /**
+     * 토큰에서 id값 추출
+     */
+    public Long getUserIdFromToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            return claims.get("id", Long.class);
         } catch (Exception e) {
             log.error("Failed to extract username from token", e);
             throw new InvalidTokenException("Invalid token");

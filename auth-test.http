@@ -40,7 +40,7 @@ POST {{host}}/api/v1/auth/login
 Content-Type: {{contentType}}
 
 {
-  "username": "testuser1772437275",
+  "username": "testuser1772442655",
   "password": "SecurePassword123!"
 }
 
@@ -100,3 +100,7 @@ Authorization: Bearer {{refreshToken}}
 {
   "refreshToken": "{{refreshToken}}"
 }
+
+### 4-1. 프로필 삭제
+DELETE {{host}}/api/v1/profiles/1
+Authorization: Bearer {{accessToken}}

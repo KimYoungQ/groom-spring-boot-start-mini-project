@@ -8,7 +8,9 @@ import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.DuplicateEmailException;
 import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
+import com.study.profile_stack_api.global.exception.UnauthorizedException;
 import com.study.profile_stack_api.global.mapper.ProfileMapper;
+import com.study.profile_stack_api.global.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,8 +118,16 @@ public class ProfileService {
     // ================ DELETE ====================
     public ProfileDeleteResponse deleteProfileById(long id) {
 
-        profileDao.getProfile(id)
+        Profile profile = profileDao.getProfile(id)
                 .orElseThrow(() -> new ProfileNotFoundException(id));
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        boolean isAdmin = SecurityUtil.hasRole("ROLE_ADMIN");
+
+        // 현재 사용자 or 관리자
+        if (!currentUserId.equals(profile.getId()) && !isAdmin) {
+            throw new UnauthorizedException("삭제 권한이 없습니다");
+        }
 
         profileDao.deleteProfileById(id);
 

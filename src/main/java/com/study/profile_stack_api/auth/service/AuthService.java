@@ -94,7 +94,7 @@ public class AuthService {
                     .collect(Collectors.joining(","));
 
             // 4. Access Token + Refresh Token 생성
-            String accessToken = jwtTokenProvider.generateAccessToken(user.getUsername(), roles);
+            String accessToken = jwtTokenProvider.generateAccessToken(user.getId(), user.getUsername(), roles);
             String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUsername());
 
             // 5. Refresh Token을 DB에 저장
@@ -154,7 +154,7 @@ public class AuthService {
         String roles = "ROLE_" + userRole.name();
 
         // Generate new tokens
-        String newAccessToken = jwtTokenProvider.generateAccessToken(member.getUsername(), roles);
+        String newAccessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getUsername(), roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(member.getUsername());
 
         // Update refresh token in database

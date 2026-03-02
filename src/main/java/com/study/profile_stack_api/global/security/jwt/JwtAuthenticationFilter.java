@@ -3,6 +3,7 @@ package com.study.profile_stack_api.global.security.jwt;
 
 import com.study.profile_stack_api.auth.exception.ExpiredTokenException;
 import com.study.profile_stack_api.auth.exception.InvalidTokenException;
+import com.study.profile_stack_api.global.security.util.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -98,7 +99,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 로그인할 때, Access Token을 만들 때, 입력했던 or 넣었던 값들 중에
             // username 꺼내기 메서드
             String username = jwtTokenProvider.getUsernameFromToken(token);
-
+            Long userId = jwtTokenProvider.getUserIdFromToken(token);
             // Extract roles from token
             // Role(권한 정보) 꺼내기 메서드
             String rolesString = jwtTokenProvider.getRolesFromToken(token);
@@ -106,9 +107,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Create UserDetails
             // Spring Security에서 사용하는 UserDetails 인터페이스를 구현한 User 객체 생성
-            UserDetails userDetails = User.builder()
+//            UserDetails userDetails = User.builder()
+//                    .username(username)
+//                    .password("") // Password is not needed for JWT authentication
+//                    .authorities(authorities)
+//                    .build();
+
+            // 커스텀 객체 사용
+            UserDetails userDetails = CustomUserDetails.builder()
+                    .id(userId)
                     .username(username)
-                    .password("") // Password is not needed for JWT authentication
+                    .password("")
                     .authorities(authorities)
                     .build();
 
