@@ -19,6 +19,10 @@ Content-Type: {{contentType}}
   "email": "testuser{{$timestamp}}@example.com"
 }
 
+> {%
+    client.global.set("newUser", response.body.data.username);
+%}
+
 ### 1-2. 중복 사용자명으로 회원가입 시도 (실패 예상)
 POST {{host}}/api/v1/auth/signup
 Content-Type: {{contentType}}
@@ -40,7 +44,7 @@ POST {{host}}/api/v1/auth/login
 Content-Type: {{contentType}}
 
 {
-  "username": "testuser1772442655",
+  "username": "{{newUser}}",
   "password": "SecurePassword123!"
 }
 
@@ -89,10 +93,10 @@ Content-Type: {{contentType}}
 }
 
 ### ========================================
-### 6. 로그아웃 테스트
+### 4. 로그아웃 테스트
 ### ========================================
 
-### 6-1. 정상 로그아웃
+### 4-1. 정상 로그아웃
 POST {{host}}/api/v1/auth/logout
 Content-Type: {{contentType}}
 Authorization: Bearer {{refreshToken}}
@@ -101,6 +105,36 @@ Authorization: Bearer {{refreshToken}}
   "refreshToken": "{{refreshToken}}"
 }
 
+### ========================================
+### 5. Profile API 테스트
+### ========================================
+
+### 5-1. 프로필 생성
+POST {{host}}/api/v1/profiles
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+
+{
+    "name": "김테스",
+    "email": "java.yu@example.com",
+    "bio": "이직하고 싶어요",
+    "position": "BACKEND",
+    "careerYears": 3,
+    "githubUrl": "https://github.com/KimYoungQ",
+    "blogUrl": "https://www.notion.so/YG-Dev-2e8eca6f192b802cbd82cada1ef2e823"
+}
+
+### 3-1. 프로필 수정
+PUT {{host}}/api/v1/profiles/2
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+
+{
+    "bio": "Spring Boot와 JPA를 사랑하는 백엔드 개발자입니다. 최근 Kotlin에도 관심이 생겼습니다.",
+    "careerYears": 4
+}
+
+
 ### 4-1. 프로필 삭제
-DELETE {{host}}/api/v1/profiles/1
+DELETE {{host}}/api/v1/profiles/4
 Authorization: Bearer {{accessToken}}

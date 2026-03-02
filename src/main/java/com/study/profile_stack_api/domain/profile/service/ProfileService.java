@@ -42,6 +42,9 @@ public class ProfileService {
                     throw new DuplicateEmailException(profile.getEmail());
                 });
 
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        profile.setMemberId(currentUserId);
+
         Profile savedProfile =  profileDao.save(profile);
 
         return profileMapper.toResponse(savedProfile);
@@ -109,6 +112,12 @@ public class ProfileService {
             throw new IllegalArgumentException("수정할 내용이 없습니다.");
         }
 
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+
+        if (!currentUserId.equals(profile.getMemberId())) {
+            throw new UnauthorizedException("본인 프로필만 수정 가능합니다.");
+        }
+
         profileMapper.partialUpdate(profileRequest, profile);
         Profile savedProfile = profileDao.updateProfile(profile);
 
@@ -122,11 +131,9 @@ public class ProfileService {
                 .orElseThrow(() -> new ProfileNotFoundException(id));
 
         Long currentUserId = SecurityUtil.getCurrentUserId();
-        boolean isAdmin = SecurityUtil.hasRole("ROLE_ADMIN");
 
-        // 현재 사용자 or 관리자
-        if (!currentUserId.equals(profile.getId()) && !isAdmin) {
-            throw new UnauthorizedException("삭제 권한이 없습니다");
+        if (!currentUserId.equals(profile.getMemberId())) {
+            throw new UnauthorizedException("본인 프로필만 삭제 가능합니다.");
         }
 
         profileDao.deleteProfileById(id);

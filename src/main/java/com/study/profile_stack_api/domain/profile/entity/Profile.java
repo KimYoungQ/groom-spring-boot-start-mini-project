@@ -14,6 +14,7 @@ import java.util.Optional;
 public class Profile {
 
     private long id;
+    private long memberId;
     private String name;
     private String email;
     private String bio;

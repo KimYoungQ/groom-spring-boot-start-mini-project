@@ -76,6 +76,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (path.equals("/api/v1/auth/logout")) {
             return false;
         }
+
+        if (path.startsWith("/api/v1/profiles") && "GET".equals(request.getMethod())) {
+            return true;
+        }
+
         return path.startsWith("/api/v1/auth/");
     }
 
