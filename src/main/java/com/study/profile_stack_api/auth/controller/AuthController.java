@@ -1,7 +1,11 @@
 package com.study.profile_stack_api.auth.controller;
 
-import com.study.profile_stack_api.auth.dto.SignupRequest;
-import com.study.profile_stack_api.auth.dto.SignupResponse;
+import com.study.profile_stack_api.auth.dto.request.LoginRequest;
+import com.study.profile_stack_api.auth.dto.request.RefreshTokenRequest;
+import com.study.profile_stack_api.auth.dto.request.SignupRequest;
+import com.study.profile_stack_api.auth.dto.response.LoginResponse;
+import com.study.profile_stack_api.auth.dto.response.SignupResponse;
+import com.study.profile_stack_api.auth.dto.response.TokenResponse;
 import com.study.profile_stack_api.auth.service.AuthService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import jakarta.validation.Valid;
@@ -35,5 +39,31 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response));
+    }
+
+    /**
+     * User login
+     * POST /api/auth/login
+     */
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+        log.info("Login request for username: {}", request.getUsername());
+
+        LoginResponse response = authService.login(request);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * Refresh access token
+     * POST /api/auth/refresh
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<TokenResponse>> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        log.info("Token refresh request");
+
+        TokenResponse response = authService.refresh(request);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

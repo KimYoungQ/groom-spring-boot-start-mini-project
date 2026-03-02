@@ -1,4 +1,4 @@
-package com.study.profile_stack_api.auth.dto;
+package com.study.profile_stack_api.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

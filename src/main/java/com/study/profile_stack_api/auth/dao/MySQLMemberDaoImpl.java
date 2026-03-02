@@ -4,6 +4,7 @@ import com.study.profile_stack_api.auth.entity.Member;
 import com.study.profile_stack_api.auth.entity.MemberRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Slf4j
@@ -52,6 +54,17 @@ public class MySQLMemberDaoImpl implements MemberDao {
         return member;
     }
 
+    public void saveRefreshToken(Long memberId, String token, Timestamp expiresAt) {
+        // First, delete any existing refresh tokens for this user
+        String deleteSql = "DELETE FROM refresh_token WHERE member_id = ?";
+        jdbcTemplate.update(deleteSql, memberId);
+
+        // Insert new refresh token
+        String insertSql = "INSERT INTO refresh_token (member_id, token, expiry_date) VALUES (?, ?, ?)";
+        jdbcTemplate.update(insertSql, memberId, token, expiresAt);
+        log.debug("Saved refresh token for user ID: {}", memberId);
+    }
+
     // ====================== Read ======================
 
     @Override
@@ -60,15 +73,35 @@ public class MySQLMemberDaoImpl implements MemberDao {
         String sql = "SELECT * FROM member WHERE username = ?";
 
         try {
-            Member member = jdbcTemplate.queryForObject(sql, userRowMapper, userName);
+            Member member = jdbcTemplate.queryForObject(sql, memberRowMapper, userName);
             return Optional.ofNullable(member);
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
+    /**
+     * Find user by refresh token
+     */
+    public Optional<Member> findByRefreshToken(String refreshToken) {
+        String sql = """
+                SELECT m.* FROM member m
+                INNER JOIN refresh_token rt ON m.id = rt.member_id
+                WHERE rt.token = ? AND rt.expiry_date > NOW()
+                """;
+
+        try {
+            Member user = jdbcTemplate.queryForObject(sql, memberRowMapper, refreshToken);
+            log.debug("Found user by refresh token");
+            return Optional.ofNullable(user);
+        } catch (EmptyResultDataAccessException e) {
+            log.debug("No user found with valid refresh token");
+            return Optional.empty();
+        }
+    }
+
     // ====================== Mapper ======================
-    private final RowMapper<Member> userRowMapper = (rs, rowNum) ->
+    private final RowMapper<Member> memberRowMapper = (rs, rowNum) ->
             Member.builder()
                     .id(rs.getLong("id"))
                     .password(rs.getString("password"))

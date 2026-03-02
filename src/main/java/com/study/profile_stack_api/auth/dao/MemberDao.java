@@ -10,6 +10,10 @@ public interface MemberDao {
     // ========== CREATE ==========
     Member save(Member user);
 
+    void saveRefreshToken(Long memberId, String token, Timestamp expiresAt);
+
     // ========== READ ==========
     Optional<Member> findByUsername(String userName);
+
+    Optional<Member> findByRefreshToken(String refreshToken);
 }

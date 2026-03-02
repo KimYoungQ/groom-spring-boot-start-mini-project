@@ -1,4 +1,4 @@
-package com.study.profile_stack_api.auth.dto;
+package com.study.profile_stack_api.auth.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
